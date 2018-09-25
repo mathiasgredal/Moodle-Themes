@@ -1,4 +1,4 @@
-function init() {
+function darkmode() {
     'use strict';
 
     //Corner rounding
