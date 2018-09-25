@@ -8,7 +8,6 @@
 // @grant        none
 // ==/UserScript==
 
-function darkmode() {
     'use strict';
 
     // Your code here...
