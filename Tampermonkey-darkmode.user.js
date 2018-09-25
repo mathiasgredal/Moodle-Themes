@@ -1,20 +1,38 @@
-// Your code here...
+// ==UserScript==
+// @name         Moodle 2.0
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       You
+// @match        https://moodle.zbc.dk/*
+// @grant        none
+// @updateURL   https://github.com/mathiasgredal/Moodle-Themes/raw/master/Tampermonkey-darkmode.user.js
+// @downloadURL https://github.com/mathiasgredal/Moodle-Themes/raw/master/Tampermonkey-darkmode.user.js
+// ==/UserScript==
 
-var background = "#2C2F33"
-var card = "#23272A"
-var header = "#23272A"
-var button = "#23272A"
-var text = "#fff"
-var cardholder = "#36393F"
+function init() {
+    'use strict';
 
-document.body.style.background = background;
+    //Corner rounding
+    var cards = document.getElementsByClassName("praxis-course-overview-cards");
+
+    // Coloring
+
+    var background = "#2C2F33"
+    var card = "#23272A"
+    var header = "#23272A"
+    var button = "#23272A"
+    var text = "#fff"
+    var cardholder = "#36393F"
+
+    document.body.style.background = background;
 
 
-for(var i = 0; i <= document.styleSheets[1].cssRules.length; i++)
-{
-    if(document.styleSheets[1].cssRules[i].selectorText)
+    for(var i = 0; i <= document.styleSheets[1].cssRules.length; i++)
     {
-        document.getElementById("nav-drawer").style.backgroundColor = card;
+        if(document.styleSheets[1].cssRules[i].selectorText)
+        {
+            document.getElementById("nav-drawer").style.backgroundColor = card;
 
         switch(document.styleSheets[1].cssRules[i].selectorText)
         {
@@ -150,8 +168,23 @@ for(var i = 0; i <= document.styleSheets[1].cssRules.length; i++)
             case ".preferences-container .preference-table tr td:nth-child(even)":
                 document.styleSheets[1].cssRules[i].style.backgroundColor = cardholder;
                 break;
+            case ".dropdown-menu":
+                document.styleSheets[1].cssRules[i].style.backgroundColor = cardholder;
+                document.styleSheets[1].cssRules[i].style.border = "1px solid "+card;
+                break;
+            case ".dropdown-menu .dropdown-item":
+                document.styleSheets[1].cssRules[i].style.borderBottom = "1px solid "+card;
+
+
+
+
 
         }
+        }
+
     }
 
 }
+
+
+
