@@ -1,8 +1,5 @@
 function init() {
 
-    //Corner rounding
-    var cards = document.getElementsByClassName("praxis-course-overview-cards");
-
     // Coloring
 
     var background = "#2C2F33"
