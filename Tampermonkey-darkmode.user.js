@@ -174,7 +174,8 @@ function init() {
                 break;
             case ".dropdown-menu .dropdown-item":
                 document.styleSheets[1].cssRules[i].style.borderBottom = "1px solid "+card;
-
+            case ".table th, table.collection th, table.flexible th, .generaltable th, .table td, table.collection td, table.flexible td, .generaltable td":
+                document.styleSheets[1].cssRules[i].style.borderTop = "1px solid " + card;
 
 
 
