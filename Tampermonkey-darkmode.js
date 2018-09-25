@@ -1,32 +1,20 @@
-// ==UserScript==
-// @name         Moodle 2.0
-// @namespace    http://tampermonkey.net/
-// @version      0.1
-// @description  try to take over the world!
-// @author       You
-// @match        https://moodle.zbc.dk/*
-// @grant        none
-// ==/UserScript==
+// Your code here...
 
-    'use strict';
+var background = "#fff"
+var card = "#23272A"
+var header = "#23272A"
+var button = "#23272A"
+var text = "#fff"
+var cardholder = "#36393F"
 
-    // Your code here...
-
-    var background = "#fff"
-    var card = "#23272A"
-    var header = "#23272A"
-    var button = "#23272A"
-    var text = "#fff"
-    var cardholder = "#36393F"
-
-    document.body.style.background = background;
+document.body.style.background = background;
 
 
-    for(var i = 0; i <= document.styleSheets[1].cssRules.length; i++)
+for(var i = 0; i <= document.styleSheets[1].cssRules.length; i++)
+{
+    if(document.styleSheets[1].cssRules[i].selectorText)
     {
-        if(document.styleSheets[1].cssRules[i].selectorText)
-        {
-            document.getElementById("nav-drawer").style.backgroundColor = card;
+        document.getElementById("nav-drawer").style.backgroundColor = card;
 
         switch(document.styleSheets[1].cssRules[i].selectorText)
         {
@@ -164,9 +152,6 @@
                 break;
 
         }
-        }
-
     }
 
-
-
+}
