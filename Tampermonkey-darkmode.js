@@ -1,6 +1,6 @@
 // Your code here...
 
-var background = "#fff"
+var background = "#2C2F33"
 var card = "#23272A"
 var header = "#23272A"
 var button = "#23272A"
