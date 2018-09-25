@@ -20,7 +20,7 @@ function init() {
     // Coloring
 
     var background = "#2C2F33"
-    var card = "#23272A"
+    var card = "#2C2F33"
     var header = "#23272A"
     var button = "#23272A"
     var text = "#fff"
