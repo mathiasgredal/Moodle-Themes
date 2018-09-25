@@ -7,8 +7,8 @@
 // @match        https://moodle.zbc.dk/*
 // @grant        none
 // @require      https://github.com/mathiasgredal/Moodle-Themes/raw/master/Tampermonkey-darkmode.js
-// @updateURL    https://github.com/mathiasgredal/Moodle-Themes/raw/master/Tampermonkey-darkmode.js
-// @downloadURL  https://github.com/mathiasgredal/Moodle-Themes/raw/master/Tampermonkey-darkmode.js
+// @updateURL    https://github.com/mathiasgredal/Moodle-Themes/raw/master/tampermonkey-darkmode.user.js
+// @downloadURL  https://github.com/mathiasgredal/Moodle-Themes/raw/master/tampermonkey-darkmode.user.js
 // ==/UserScript==
 
 
