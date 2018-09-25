@@ -1,5 +1,4 @@
 function darkmode() {
-    'use strict';
 
     //Corner rounding
     var cards = document.getElementsByClassName("praxis-course-overview-cards");
