@@ -13,5 +13,3 @@
 
 
 init();
-
-console.log("hello world");
