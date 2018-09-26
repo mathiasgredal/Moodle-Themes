@@ -201,6 +201,9 @@ function init() {
                 case "h4":
                     document.styleSheets[1].cssRules[i].style.color = text;
                     break;
+                case ".table-striped tbody tr:nth-of-type(2n+1), table.collection tbody tr:nth-of-type(2n+1), table#explaincaps tbody tr:nth-of-type(2n+1), table#defineroletable tbody tr:nth-of-type(2n+1), table.grading-report tbody tr:nth-of-type(2n+1), table#listdirectories tbody tr:nth-of-type(2n+1), table.rolecaps tbody tr:nth-of-type(2n+1), table.userenrolment tbody tr:nth-of-type(2n+1), form#movecourses table tbody tr:nth-of-type(2n+1), #page-admin-course-index .editcourse tbody tr:nth-of-type(2n+1), .forumheaderlist tbody tr:nth-of-type(2n+1), table.flexible tbody tr:nth-of-type(2n+1), .generaltable tbody tr:nth-of-type(2n+1)":
+                    document.styleSheets[1].cssRules[i].style.backgroundColor = cardholder;
+                    break;
 
 
             }
