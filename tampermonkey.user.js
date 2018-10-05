@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Moodle 2.0
 // @namespace    http://tampermonkey.net/
-// @version      0.4
+// @version      0.5
 // @description  try to take over the world!
 // @author       You
 // @match        https://moodle.zbc.dk/*
@@ -11,19 +11,54 @@
 // @downloadURL  https://github.com/mathiasgredal/Moodle-Themes/raw/master/tampermonkey.user.js
 // ==/UserScript==
 
+var discordColors = {};
+discordColors["SetColorBackgroundInput"] = "#2C2F33";
+discordColors["SetColorNavigationsbarInput"] = "#23272A";
+discordColors["SetColorKortInput"] = "#23272A";
+discordColors["SetColorKortHolderInput"] = "#36393F";
+discordColors["SetColorKnapInput"] = "#23272A";
+discordColors["SetColorTekstInput"] = "#FFFFFF";
+discordColors["SetColorInputInput"] = "#99AAB5";
+discordColors["SetColorSpecialInput"] = "#7289DA";
+
+var preset = "custom";
+/*
+    if(getColor("colorpreset", "custom") != "")
+    {
+        console.log("selecting index");
+        preset = document.getElementById("id_colorpreset").selectedIndex = getColor("colorpreset", "custom");
+    }
+    */
+// Coloring
+var background = getColor("SetColorBackgroundInput", preset);
+var card = getColor("SetColorKortInput", preset);
+var header = getColor("SetColorNavigationsbarInput", preset);
+var button = getColor("SetColorKnapInput", preset);
+var text = getColor("SetColorTekstInput", preset);
+var cardholder = getColor("SetColorKortHolderInput", preset);
+var inputcolor = getColor("SetColorInputInput", preset);
+var blurple = getColor("SetColorSpecialInput", preset);
+
 var css = `
 
 :root {
-    --bg-color: #2C2F33;
-    --card-color: #23272A;
-    --header-color: #23272A;
-    --button-color: #23272A;
-    --text-color: #fff;
-    --card-holder: #36393F;
-    --inputcolor: #99AAB5;
-    --blurple: #7289DA;
+    --bg-color: `+ background +`;
+    --card-color: `+ card +`;
+    --header-color: `+ header +`;
+    --button-color: `+ button +`;
+    --text-color: `+ text +`;
+    --card-holder: `+ cardholder +`;
+    --inputcolor: `+ inputcolor +`;
+    --blurple: `+ blurple +`;
 }
 
+body #page #nav-drawer .list-group .drawer-group-wrapper .list-group-item.font-weight-bold .fa-stack .under {
+    color: var(--blurple);
+}
+
+body #page #nav-drawer .list-group .drawer-group-wrapper .list-group-item.font-weight-bold {
+    border-left: 3px solid var(--blurple);
+}
 
 body {
     background-color: var(--bg-color);
@@ -611,6 +646,8 @@ input:focus {
 `;
 
 
+
+
 (function(){
 
     var loc = document.location.href;
@@ -635,25 +672,40 @@ input:focus {
 document.addEventListener ("DOMContentLoaded", init);
 
 
+
+
 function init() {
 
     var thumbnails = {};
     thumbnails["Biologi niveau C"] = "https://raw.githubusercontent.com/mathiasgredal/Moodle-Themes/master/Images/Biologi_DNA.jpg"
-    // Coloring
 
-    var background = "#2C2F33"
-    var card = "#23272A"
-    var header = "#23272A"
-    var button = "#23272A"
-    var text = "#fff"
-    var cardholder = "#36393F"
-    var inputcolor = "#99AAB5"
-    var blurple = "#7289DA"
+    console.log("sucking ducks");
+
+    var preset = "custom";
+    /*
+    if(getColor("colorpreset", "custom") != "")
+    {
+        console.log("selecting index");
+        preset = document.getElementById("id_colorpreset").selectedIndex = getColor("colorpreset", "custom");
+    }
+    */
+    // Coloring
+    var background = getColor("SetColorBackgroundInput", preset);
+    var card = getColor("SetColorKortInput", preset);
+    var header = getColor("SetColorNavigationsbarInput", preset);
+    var button = getColor("SetColorKnapInput", preset);
+    var text = getColor("SetColorTekstInput", preset);
+    var cardholder = getColor("SetColorKortHolderInput", preset);
+    var inputcolor = getColor("SetColorInputInput", preset);
+    var blurple = getColor("SetColorSpecialInput", preset);
+
+    console.log("sucking ducks 2 ");
+
 
     document.body.style.background = background;
 
 
-    for(var i = 0; i <= document.styleSheets[1].cssRules.length; i++)
+    for(var i = 0; i < document.styleSheets[1].cssRules.length; i++)
     {
         if(document.styleSheets[1].cssRules[i].selectorText)
         {
@@ -661,7 +713,20 @@ function init() {
 
             switch(document.styleSheets[1].cssRules[i].selectorText)
             {
+                case ".dropdown-menu":
+                    var moodlesettingschecker = document.getElementById("Moodle-Theme-Settings");
+                    if( moodlesettingschecker == undefined )
+                    {
+                        var dropdown = document.getElementsByClassName("dropdown-menu dropdown-menu-right menu  align-tr-br")[0];
+                        var elementdropdownitem = dropdown.children[0].cloneNode(true);
+                        elementdropdownitem.id = "Moodle-Theme-Settings";
+                        elementdropdownitem.getElementsByTagName("span")[0].innerHTML = "Tema Indstillinger";
+                        elementdropdownitem.getElementsByTagName("i")[0].className = "icon fa fa-star";
+                        elementdropdownitem.href = "https://moodle.zbc.dk/course/view.php?id=1000000";
+                        dropdown.insertBefore(elementdropdownitem,dropdown.children[5]);
+                    }
 
+                    break;
                 case "body aside.block.block_praxis_course_overview_cards":
                     document.styleSheets[1].cssRules[i].style.backgroundColor = cardholder;
                     // Round cards
@@ -1057,26 +1122,216 @@ function init() {
 
 
 
-
-
-
             }
         }
 
     }
 
-    var cssstring = "";
-
-    for(var j = 0; j <= document.styleSheets[1].cssRules.length; j++)
+    if(window.location.href.indexOf("moodle.zbc.dk/course/view.php?id=1000000") > -1)
     {
-        var currentcss = document.styleSheets[1].cssRules[j].cssText + " \n ";
-        if(currentcss.includes("#2C2F33"))
+       // rename breadcrumb
+       document.querySelectorAll("a[href='https://moodle.zbc.dk/?redirect=0']")[0].innerHTML = "Moodle Tema Indstillinger";
+
+       // Get main ui
+        var cardblock = document.getElementById("region-main").getElementsByClassName("card card-block")[0];
+
+        // Clear UI Children
+        cardblock.innerHTML = "";
+
+        // Add settings title
+        var title = document.createElement("h2");
+        title.style.fontWeight = 400;
+        title.style.fontSize = "2.2rem";
+        title.innerHTML = "Tema indstillinger";
+
+        cardblock.appendChild(title);
+
+        // Set page title
+        document.title = "Moodle Tema Indstillinger";
+
+        // Dropdown input select
+
+        var selectField = document.createElement("div");
+        selectField.innerHTML =
+`
+<div class="form-group row  fitem   " id="yui_3_17_2_1_1538685140106_48">
+    <div class="col-md-3">
+        <span class="pull-xs-right text-nowrap">                                    </span>
+        <label class="col-form-label d-inline " for="id_lang"> Vælg præset </label>
+    </div>
+
+    <div class="col-md-9 form-inline felement" data-fieldtype="select" id="yui_3_17_2_1_1538685140106_47">
+        <select class="custom-select" name="lang" id="id_colorpreset">
+            <option value="discord" selected="">Discord Theme</option>
+            <option value="standard">Standard Moodle</option>
+            <option value="custom">Custom</option>
+        </select>
+        <div class="form-control-feedback" id="id_error_lang" style="display: none;"></div>
+    </div>
+</div>
+`
+        cardblock.appendChild(selectField);
+        document.getElementById("id_colorpreset").oninput = setColorInput;
+        if(getColor("colorpreset", "custom") != "")
         {
-            console.log(currentcss)
+            console.log("selecting index");
+            document.getElementById("id_colorpreset").selectedIndex = getColor("colorpreset", "custom");
         }
+
+        // Inner HTML
+        var inputField = document.createElement("div");
+        inputField.innerHTML =
+`<div class="form-group row  fitem   ">
+    <div class="col-md-3">
+        <span class="pull-xs-right text-nowrap">
+        </span>
+        <label class="col-form-label d-inline " for="id_pagesize">
+            Farve
+        </label>
+    </div>
+    <div class="col-md-9 form-inline felement" data-fieldtype="text">
+        <input id= "colorinput" name="favcolor" value="#fff" style="background-color: var(--card-holder);border: 0px;" type="color">
+
+        </div>
+    </div>
+</div>`;
+        var preset = document.getElementById("id_colorpreset")[document.getElementById("id_colorpreset").selectedIndex].value
+
+        inputField.getElementsByTagName("label")[0].innerHTML = "Baggrundsfarve: ";
+        inputField.getElementsByTagName("input")[0].value = getColor("SetColorBackgroundInput", preset);
+        inputField.id = "SetColorBackgroundInput";
+        cardblock.appendChild(inputField.cloneNode(true));
+
+        inputField.getElementsByTagName("label")[0].innerHTML = "Navigationsbar farve: ";
+        inputField.getElementsByTagName("input")[0].value = getColor("SetColorNavigationsbarInput", preset);
+        inputField.id = "SetColorNavigationsbarInput";
+        cardblock.appendChild(inputField.cloneNode(true));
+
+        inputField.getElementsByTagName("label")[0].innerHTML = "Kort farve: ";
+        inputField.getElementsByTagName("input")[0].value = getColor("SetColorKortInput", preset);
+        inputField.id = "SetColorKortInput";
+        cardblock.appendChild(inputField.cloneNode(true));
+
+        inputField.getElementsByTagName("label")[0].innerHTML = "Kortholder farve: ";
+        inputField.getElementsByTagName("input")[0].value = getColor("SetColorKortHolderInput", preset);
+        inputField.id = "SetColorKortHolderInput";
+        cardblock.appendChild(inputField.cloneNode(true));
+
+        inputField.getElementsByTagName("label")[0].innerHTML = "Knap farve: ";
+        inputField.getElementsByTagName("input")[0].value = getColor("SetColorKnapInput", preset);
+        inputField.id = "SetColorKnapInput";
+        cardblock.appendChild(inputField.cloneNode(true));
+
+        inputField.getElementsByTagName("label")[0].innerHTML = "Tekst farve: ";
+        inputField.getElementsByTagName("input")[0].value = getColor("SetColorTekstInput", preset);
+        inputField.id = "SetColorTekstInput";
+        cardblock.appendChild(inputField.cloneNode(true));
+
+        inputField.getElementsByTagName("label")[0].innerHTML = "Input farve: ";
+        inputField.getElementsByTagName("input")[0].value = getColor("SetColorInputInput", preset);
+        inputField.id = "SetColorInputInput";
+        cardblock.appendChild(inputField.cloneNode(true));
+
+        inputField.getElementsByTagName("label")[0].innerHTML = "Special farve: ";
+        inputField.getElementsByTagName("input")[0].value = getColor("SetColorSpecialInput", preset);
+        inputField.id = "SetColorSpecialInput";
+        cardblock.appendChild(inputField.cloneNode(true));
+
+        // Save or cancel
+
+        var save = document.createElement("div");
+        save.innerHTML =
+`
+<div class="form-group row  fitem femptylabel  " data-groupname="buttonar">
+    <div class="col-md-3">
+        <span class="pull-xs-right text-nowrap"></span>
+        <label class="col-form-label d-inline " for="fgroup_id_buttonar"></label>
+    </div>
+
+    <div class="col-md-9 form-inline felement" data-fieldtype="group">
+        <div class="form-group  fitem  ">
+        <label class="col-form-label " for="id_submitbutton"></label>
+        <span data-fieldtype="submit">
+            <input class="btn btn-primary" name="submitbutton" id="id_submitbutton" value="Gem" type="submit">
+        </span>
+    </div>
+
+    <div class="form-group  fitem   btn-cancel">
+        <label class="col-form-label " for="id_cancel">                         </label>
+        <span data-fieldtype="submit">
+            <input class="btn btn-secondary" name="cancel" id="id_cancel" value="Annuller" onclick="window.location.href = 'https://moodle.zbc.dk/my/'" type="submit">
+        </span>
+    </div>
+
+</div>
+`;
+        save.onclick = saveColors;
+        cardblock.appendChild(save);
+
+
     }
-
-    console.log(cssstring);
-
 }
+
+function setColorInput()
+{
+    var preset = document.getElementById("id_colorpreset")[document.getElementById("id_colorpreset").selectedIndex].value
+
+        document.getElementById("SetColorBackgroundInput").getElementsByTagName("input")[0].value = getColor("SetColorBackgroundInput", preset);
+        document.getElementById("SetColorNavigationsbarInput").getElementsByTagName("input")[0].value = getColor("SetColorNavigationsbarInput", preset);
+        document.getElementById("SetColorKortInput").getElementsByTagName("input")[0].value = getColor("SetColorKortInput", preset);
+        document.getElementById("SetColorKortHolderInput").getElementsByTagName("input")[0].value = getColor("SetColorKortHolderInput", preset);
+        document.getElementById("SetColorKnapInput").getElementsByTagName("input")[0].value = getColor("SetColorKnapInput", preset);
+        document.getElementById("SetColorTekstInput").getElementsByTagName("input")[0].value = getColor("SetColorTekstInput", preset);
+        document.getElementById("SetColorInputInput").getElementsByTagName("input")[0].value = getColor("SetColorInputInput", preset);
+        document.getElementById("SetColorSpecialInput").getElementsByTagName("input")[0].value = getColor("SetColorSpecialInput", preset);
+}
+
+function getColor(cname, preset)
+{
+    if(preset == "custom")
+    {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+    else if(preset == "discord")
+    {
+        if(discordColors[cname] != undefined)
+        {
+            return discordColors[cname]
+        }
+        return "";
+    }
+}
+
+function saveColors()
+{
+    setCookie("SetColorBackgroundInput" ,document.getElementById("SetColorBackgroundInput").getElementsByTagName("input")[0].value, 999);
+    setCookie("SetColorNavigationsbarInput" ,document.getElementById("SetColorNavigationsbarInput").getElementsByTagName("input")[0].value, 999);
+    setCookie("SetColorKortInput" ,document.getElementById("SetColorKortInput").getElementsByTagName("input")[0].value, 999);
+    setCookie("SetColorKortHolderInput" ,document.getElementById("SetColorKortHolderInput").getElementsByTagName("input")[0].value, 999);
+    setCookie("SetColorKnapInput" ,document.getElementById("SetColorKnapInput").getElementsByTagName("input")[0].value, 999);
+    setCookie("SetColorTekstInput" ,document.getElementById("SetColorTekstInput").getElementsByTagName("input")[0].value, 999);
+    setCookie("SetColorInputInput" ,document.getElementById("SetColorInputInput").getElementsByTagName("input")[0].value, 999);
+    setCookie("SetColorSpecialInput" ,document.getElementById("SetColorSpecialInput").getElementsByTagName("input")[0].value, 999);
+    setCookie("colorpreset" , document.getElementById("id_colorpreset").selectedIndex, 999);
+}
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
 
