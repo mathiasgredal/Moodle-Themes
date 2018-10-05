@@ -21,14 +21,12 @@ discordColors["SetColorTekstInput"] = "#FFFFFF";
 discordColors["SetColorInputInput"] = "#99AAB5";
 discordColors["SetColorSpecialInput"] = "#7289DA";
 
-var preset = "custom";
-/*
+var preset = "discord";
     if(getColor("colorpreset", "custom") != "")
     {
-        console.log("selecting index");
-        preset = document.getElementById("id_colorpreset").selectedIndex = getColor("colorpreset", "custom");
+        preset = getColor("colorpreset", "custom");
     }
-    */
+
 // Coloring
 var background = getColor("SetColorBackgroundInput", preset);
 var card = getColor("SetColorKortInput", preset);
@@ -699,7 +697,6 @@ function init() {
     var inputcolor = getColor("SetColorInputInput", preset);
     var blurple = getColor("SetColorSpecialInput", preset);
 
-    console.log("sucking ducks 2 ");
 
 
     document.body.style.background = background;
@@ -1304,7 +1301,7 @@ function getColor(cname, preset)
         }
         return "";
     }
-    else if(preset == "discord")
+    else
     {
         if(discordColors[cname] != undefined)
         {
@@ -1333,5 +1330,9 @@ function setCookie(cname, cvalue, exdays) {
     var expires = "expires="+ d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
+
+
+
+
 
 
