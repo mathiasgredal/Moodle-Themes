@@ -21,7 +21,7 @@ discordColors["SetColorTekstInput"] = "#FFFFFF";
 discordColors["SetColorInputInput"] = "#99AAB5";
 discordColors["SetColorSpecialInput"] = "#7289DA";
 
-var preset = "discord";
+var preset = "c";
     if(getColor("colorpreset", "custom") != "")
     {
         preset = getColor("colorpreset", "custom");
@@ -48,6 +48,10 @@ var css = `
     --card-holder: `+ cardholder +`;
     --inputcolor: `+ inputcolor +`;
     --blurple: `+ blurple +`;
+}
+
+body div.course-content ul.topics li.section.main, body div.course-content ul.weeks li.section.main {
+    border-bottom-color: var(--blurple);
 }
 
 body #page #nav-drawer .list-group .drawer-group-wrapper .list-group-item.font-weight-bold .fa-stack .under {
@@ -640,6 +644,14 @@ input:focus {
     background-color: var(--card-holder);
 }
 
+table.quizreviewsummary td.cell {
+    background-color: var(--card-holder);
+
+}
+
+table.quizreviewsummary th.cell {
+    background-color: var(--card-holder);
+}
 
 `;
 
@@ -667,10 +679,17 @@ input:focus {
 })()
 
 
-document.addEventListener ("DOMContentLoaded", init);
+document.addEventListener ("DOMContentLoaded", checkFlag);
 
 
-
+function checkFlag() {
+    if(document == undefined) {
+       window.setTimeout(checkFlag, 100); /* this checks the flag every 100 milliseconds*/
+    } else {
+      init();
+    }
+}
+checkFlag();
 
 function init() {
 
@@ -680,13 +699,13 @@ function init() {
     console.log("sucking ducks");
 
     var preset = "custom";
-    /*
+    
     if(getColor("colorpreset", "custom") != "")
     {
         console.log("selecting index");
-        preset = document.getElementById("id_colorpreset").selectedIndex = getColor("colorpreset", "custom");
+        preset = getColor("colorpreset", "custom");
     }
-    */
+    
     // Coloring
     var background = getColor("SetColorBackgroundInput", preset);
     var card = getColor("SetColorKortInput", preset);
@@ -706,10 +725,14 @@ function init() {
     {
         if(document.styleSheets[1].cssRules[i].selectorText)
         {
-            document.getElementById("nav-drawer").style.backgroundColor = card;
-
             switch(document.styleSheets[1].cssRules[i].selectorText)
             {
+                case "table.quizreviewsummary th.cell":
+                    document.styleSheets[1].cssRules[i].style.backgroundColor = cardholder;
+                    break;
+                case "table.quizreviewsummary td.cell":
+                    document.styleSheets[1].cssRules[i].style.backgroundColor = cardholder;
+                    break;
                 case ".dropdown-menu":
                     var moodlesettingschecker = document.getElementById("Moodle-Theme-Settings");
                     if( moodlesettingschecker == undefined )
@@ -1122,7 +1145,12 @@ function init() {
             }
         }
 
+
+
     }
+
+    document.getElementById("nav-drawer").style.backgroundColor = card;
+
 
     if(window.location.href.indexOf("moodle.zbc.dk/course/view.php?id=1000000") > -1)
     {
@@ -1271,7 +1299,7 @@ function init() {
 
 function setColorInput()
 {
-    var preset = document.getElementById("id_colorpreset")[document.getElementById("id_colorpreset").selectedIndex].value
+    var preset = document.getElementById("id_colorpreset").selectedIndex
 
         document.getElementById("SetColorBackgroundInput").getElementsByTagName("input")[0].value = getColor("SetColorBackgroundInput", preset);
         document.getElementById("SetColorNavigationsbarInput").getElementsByTagName("input")[0].value = getColor("SetColorNavigationsbarInput", preset);
@@ -1285,7 +1313,7 @@ function setColorInput()
 
 function getColor(cname, preset)
 {
-    if(preset == "custom")
+    if(preset == 2)
     {
         var name = cname + "=";
         var decodedCookie = decodeURIComponent(document.cookie);
@@ -1330,9 +1358,6 @@ function setCookie(cname, cvalue, exdays) {
     var expires = "expires="+ d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
-
-
-
 
 
 
