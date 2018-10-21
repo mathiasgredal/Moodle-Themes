@@ -21,11 +21,12 @@ discordColors["SetColorTekstInput"] = "#FFFFFF";
 discordColors["SetColorInputInput"] = "#99AAB5";
 discordColors["SetColorSpecialInput"] = "#7289DA";
 
-var preset = "c";
-    if(getColor("colorpreset", "custom") != "")
-    {
-        preset = getColor("colorpreset", "custom");
-    }
+var preset = 0;
+if(getColor("colorpreset", 2) != "")
+{
+    preset = getColor("colorpreset", 2);
+}
+
 
 // Coloring
 var background = getColor("SetColorBackgroundInput", preset);
@@ -36,6 +37,7 @@ var text = getColor("SetColorTekstInput", preset);
 var cardholder = getColor("SetColorKortHolderInput", preset);
 var inputcolor = getColor("SetColorInputInput", preset);
 var blurple = getColor("SetColorSpecialInput", preset);
+console.log(background);
 
 var css = `
 
@@ -661,7 +663,7 @@ table.quizreviewsummary th.cell {
 (function(){
 
     var loc = document.location.href;
-    if( loc.indexOf("https://moodle.zbc.dk/") == 0){
+    if( loc.indexOf("https://moodle.zbc.dk/") == 0 && preset != 1){
 
         document.addEventListener('DOMSubtreeModified', injectCSS, false);
 
@@ -686,7 +688,8 @@ function checkFlag() {
     if(document == undefined) {
        window.setTimeout(checkFlag, 100); /* this checks the flag every 100 milliseconds*/
     } else {
-      init();
+
+            init();
     }
 }
 checkFlag();
@@ -697,26 +700,6 @@ function init() {
     thumbnails["Biologi niveau C"] = "https://raw.githubusercontent.com/mathiasgredal/Moodle-Themes/master/Images/Biologi_DNA.jpg"
 
     console.log("sucking ducks");
-
-    var preset = "custom";
-    
-    if(getColor("colorpreset", "custom") != "")
-    {
-        console.log("selecting index");
-        preset = getColor("colorpreset", "custom");
-    }
-    
-    // Coloring
-    var background = getColor("SetColorBackgroundInput", preset);
-    var card = getColor("SetColorKortInput", preset);
-    var header = getColor("SetColorNavigationsbarInput", preset);
-    var button = getColor("SetColorKnapInput", preset);
-    var text = getColor("SetColorTekstInput", preset);
-    var cardholder = getColor("SetColorKortHolderInput", preset);
-    var inputcolor = getColor("SetColorInputInput", preset);
-    var blurple = getColor("SetColorSpecialInput", preset);
-
-
 
     document.body.style.background = background;
 
@@ -1358,6 +1341,10 @@ function setCookie(cname, cvalue, exdays) {
     var expires = "expires="+ d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
+
+
+
+
 
 
 
