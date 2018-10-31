@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Moodle 2.0
 // @namespace    http://tampermonkey.net/
-// @version      0.5
+// @version      0.6
 // @description  try to take over the world!
 // @author       You
 // @match        https://moodle.zbc.dk/*
@@ -697,7 +697,11 @@ checkFlag();
 function init() {
 
     var thumbnails = {};
-    thumbnails["Biologi niveau C"] = "https://raw.githubusercontent.com/mathiasgredal/Moodle-Themes/master/Images/Biologi_DNA.jpg"
+    thumbnails["Biologi niveau C"] = "https://raw.githubusercontent.com/mathiasgredal/Moodle-Themes/master/Images/Biologi_DNA.jpg";
+    thumbnails["default"] = "https://raw.githubusercontent.com/mathiasgredal/Moodle-Themes/master/Images/Moodle_Themes_Credit-2.png";
+    
+
+
 
     console.log("sucking ducks");
 
@@ -749,6 +753,13 @@ function init() {
                         if(cardurl != undefined)
                         {
                             cardElems[x].getElementsByClassName("praxis-course-overview-cards-image")[0].style.backgroundImage = "url("+cardurl+")";
+                        }
+                        else
+                        {
+                            if(cardElems[x].getElementsByClassName("praxis-course-overview-cards-image")[0].style.backgroundImage == 'url("https://moodle.zbc.dk/pluginfile.php/1/block_praxis_course_overview_cards/defaultimage/hjem.jpg")')
+                            {
+                                cardElems[x].getElementsByClassName("praxis-course-overview-cards-image")[0].style.backgroundImage = "url("+thumbnails["default"]+")";
+                            }
                         }
                     }
                     break;
