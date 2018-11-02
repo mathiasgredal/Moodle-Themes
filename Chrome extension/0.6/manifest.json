@@ -1,0 +1,16 @@
+{
+   "content_scripts": [ {
+      "exclude_globs": [  ],
+      "exclude_matches": [  ],
+      "include_globs": [  ],
+      "js": [ "script.js" ],
+      "matches": [ "https://moodle.zbc.dk/*" ],
+      "run_at": "document_start"
+   } ],
+   "converted_from_user_script": true,
+   "description": "try to take over the world!",
+   "name": "Moodle 2.0",
+   "version": "0.6",
+   "manifest_version": 2
+
+}
