@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Moodle 2.0
 // @namespace    http://tampermonkey.net/
-// @version      0.61
-// @description  Customise your Moodle today
+// @version      0.6
+// @description  try to take over the world!
 // @author       You
 // @match        https://moodle.zbc.dk/*
 // @grant        none
@@ -163,6 +163,7 @@ aside#block-region-side-pre aside.block.card div.card-block h3.card-title {
 
 #page-footer .row .page-footer-address p {
     color: var(--text-color);
+	animation:blinkingText 0.8s infinite;
 }
 
 a:link {
@@ -674,6 +675,7 @@ table.quizreviewsummary th.cell {
                 var style = document.createElement("style");
                 style.innerHTML = css;
                 document.head.appendChild(style);
+
             }
         }
     }
@@ -688,11 +690,173 @@ function checkFlag() {
     if(document == undefined) {
        window.setTimeout(checkFlag, 100); /* this checks the flag every 100 milliseconds*/
     } else {
-
+        themepage();
+        if(preset != 1)
+        {
             init();
+        }
+
     }
 }
 
+function themepage()
+{
+    var moodlesettingschecker = document.getElementById("Moodle-Theme-Settings");
+    if( moodlesettingschecker == undefined )
+    {
+        var dropdown = document.getElementsByClassName("dropdown-menu dropdown-menu-right menu  align-tr-br")[0];
+        var elementdropdownitem = dropdown.children[0].cloneNode(true);
+        elementdropdownitem.id = "Moodle-Theme-Settings";
+        elementdropdownitem.getElementsByTagName("span")[0].innerHTML = "Tema Indstillinger";
+        elementdropdownitem.getElementsByTagName("i")[0].className = "icon fa fa-star";
+        elementdropdownitem.href = "https://moodle.zbc.dk/course/view.php?id=1000000";
+        dropdown.insertBefore(elementdropdownitem,dropdown.children[5]);
+    }
+
+    if(window.location.href.indexOf("moodle.zbc.dk/course/view.php?id=1000000") > -1)
+    {
+        // rename breadcrumb
+        document.querySelectorAll("a[href='https://moodle.zbc.dk/?redirect=0']")[0].innerHTML = "Moodle Tema Indstillinger";
+
+        // Get main ui
+        var cardblock = document.getElementById("region-main").getElementsByClassName("card card-block")[0];
+
+        // Clear UI Children
+        cardblock.innerHTML = "";
+
+        // Add settings title
+        var title = document.createElement("h2");
+        title.style.fontWeight = 400;
+        title.style.fontSize = "2.2rem";
+        title.innerHTML = "Tema indstillinger";
+
+        cardblock.appendChild(title);
+
+        // Set page title
+        document.title = "Moodle Tema Indstillinger";
+
+        // Dropdown input select
+
+        var selectField = document.createElement("div");
+        selectField.innerHTML =
+            `
+<div class="form-group row  fitem   " id="yui_3_17_2_1_1538685140106_48">
+<div class="col-md-3">
+<span class="pull-xs-right text-nowrap">                                    </span>
+<label class="col-form-label d-inline " for="id_lang"> Vælg præset </label>
+</div>
+
+<div class="col-md-9 form-inline felement" data-fieldtype="select" id="yui_3_17_2_1_1538685140106_47">
+<select class="custom-select" name="lang" id="id_colorpreset">
+<option value="discord" selected="">Discord Theme</option>
+<option value="standard">Standard Moodle</option>
+<option value="custom">Custom</option>
+</select>
+<div class="form-control-feedback" id="id_error_lang" style="display: none;"></div>
+</div>
+</div>
+`
+        cardblock.appendChild(selectField);
+        document.getElementById("id_colorpreset").oninput = setColorInput;
+        if(getColor("colorpreset", "custom") != "")
+        {
+            console.log("selecting index");
+            document.getElementById("id_colorpreset").selectedIndex = getColor("colorpreset", "custom");
+        }
+
+        // Inner HTML
+        var inputField = document.createElement("div");
+        inputField.innerHTML =
+            `<div class="form-group row  fitem   ">
+<div class="col-md-3">
+<span class="pull-xs-right text-nowrap">
+</span>
+<label class="col-form-label d-inline " for="id_pagesize">
+Farve
+</label>
+</div>
+<div class="col-md-9 form-inline felement" data-fieldtype="text">
+<input id= "colorinput" name="favcolor" value="#fff" style="background-color: var(--card-holder);border: 0px;" type="color">
+
+</div>
+</div>
+</div>`;
+        var preset = document.getElementById("id_colorpreset")[document.getElementById("id_colorpreset").selectedIndex].value
+
+        inputField.getElementsByTagName("label")[0].innerHTML = "Baggrundsfarve: ";
+        inputField.getElementsByTagName("input")[0].value = getColor("SetColorBackgroundInput", preset);
+        inputField.id = "SetColorBackgroundInput";
+        cardblock.appendChild(inputField.cloneNode(true));
+
+        inputField.getElementsByTagName("label")[0].innerHTML = "Navigationsbar farve: ";
+        inputField.getElementsByTagName("input")[0].value = getColor("SetColorNavigationsbarInput", preset);
+        inputField.id = "SetColorNavigationsbarInput";
+        cardblock.appendChild(inputField.cloneNode(true));
+
+        inputField.getElementsByTagName("label")[0].innerHTML = "Kort farve: ";
+        inputField.getElementsByTagName("input")[0].value = getColor("SetColorKortInput", preset);
+        inputField.id = "SetColorKortInput";
+        cardblock.appendChild(inputField.cloneNode(true));
+
+        inputField.getElementsByTagName("label")[0].innerHTML = "Kortholder farve: ";
+        inputField.getElementsByTagName("input")[0].value = getColor("SetColorKortHolderInput", preset);
+        inputField.id = "SetColorKortHolderInput";
+        cardblock.appendChild(inputField.cloneNode(true));
+
+        inputField.getElementsByTagName("label")[0].innerHTML = "Knap farve: ";
+        inputField.getElementsByTagName("input")[0].value = getColor("SetColorKnapInput", preset);
+        inputField.id = "SetColorKnapInput";
+        cardblock.appendChild(inputField.cloneNode(true));
+
+        inputField.getElementsByTagName("label")[0].innerHTML = "Tekst farve: ";
+        inputField.getElementsByTagName("input")[0].value = getColor("SetColorTekstInput", preset);
+        inputField.id = "SetColorTekstInput";
+        cardblock.appendChild(inputField.cloneNode(true));
+
+        inputField.getElementsByTagName("label")[0].innerHTML = "Input farve: ";
+        inputField.getElementsByTagName("input")[0].value = getColor("SetColorInputInput", preset);
+        inputField.id = "SetColorInputInput";
+        cardblock.appendChild(inputField.cloneNode(true));
+
+        inputField.getElementsByTagName("label")[0].innerHTML = "Special farve: ";
+        inputField.getElementsByTagName("input")[0].value = getColor("SetColorSpecialInput", preset);
+        inputField.id = "SetColorSpecialInput";
+        cardblock.appendChild(inputField.cloneNode(true));
+
+        // Save or cancel
+
+        var save = document.createElement("div");
+        save.innerHTML =
+            `
+<div class="form-group row  fitem femptylabel  " data-groupname="buttonar">
+<div class="col-md-3">
+<span class="pull-xs-right text-nowrap"></span>
+<label class="col-form-label d-inline " for="fgroup_id_buttonar"></label>
+</div>
+
+<div class="col-md-9 form-inline felement" data-fieldtype="group">
+<div class="form-group  fitem  ">
+<label class="col-form-label " for="id_submitbutton"></label>
+<span data-fieldtype="submit">
+<input class="btn btn-primary" name="submitbutton" id="id_submitbutton" value="Gem" type="submit">
+</span>
+</div>
+
+<div class="form-group  fitem   btn-cancel">
+<label class="col-form-label " for="id_cancel">                         </label>
+<span data-fieldtype="submit">
+<input class="btn btn-secondary" name="cancel" id="id_cancel" value="Annuller" onclick="window.location.href = 'https://moodle.zbc.dk/my/'" type="submit">
+</span>
+</div>
+
+</div>
+`;
+        save.onclick = saveColors;
+        cardblock.appendChild(save);
+
+
+    }
+}
 function init() {
 
     var thumbnails = {};
@@ -718,21 +882,6 @@ function init() {
                     break;
                 case "table.quizreviewsummary td.cell":
                     document.styleSheets[stylesheetindex].cssRules[i].style.backgroundColor = cardholder;
-                    break;
-                case ".dropdown-menu":
-                    console.log("dropdown");
-                    var moodlesettingschecker = document.getElementById("Moodle-Theme-Settings");
-                    if( moodlesettingschecker == undefined )
-                    {
-                        var dropdown = document.getElementsByClassName("dropdown-menu dropdown-menu-right menu  align-tr-br")[0];
-                        var elementdropdownitem = dropdown.children[0].cloneNode(true);
-                        elementdropdownitem.id = "Moodle-Theme-Settings";
-                        elementdropdownitem.getElementsByTagName("span")[0].innerHTML = "Tema Indstillinger";
-                        elementdropdownitem.getElementsByTagName("i")[0].className = "icon fa fa-star";
-                        elementdropdownitem.href = "https://moodle.zbc.dk/course/view.php?id=1000000";
-                        dropdown.insertBefore(elementdropdownitem,dropdown.children[5]);
-                    }
-
                     break;
                 case "body aside.block.block_praxis_course_overview_cards":
                     document.styleSheets[stylesheetindex].cssRules[i].style.backgroundColor = cardholder;
@@ -1146,149 +1295,7 @@ function init() {
     document.getElementById("nav-drawer").style.backgroundColor = card;
 
 
-    if(window.location.href.indexOf("moodle.zbc.dk/course/view.php?id=1000000") > -1)
-    {
-       // rename breadcrumb
-       document.querySelectorAll("a[href='https://moodle.zbc.dk/?redirect=0']")[0].innerHTML = "Moodle Tema Indstillinger";
-
-       // Get main ui
-        var cardblock = document.getElementById("region-main").getElementsByClassName("card card-block")[0];
-
-        // Clear UI Children
-        cardblock.innerHTML = "";
-
-        // Add settings title
-        var title = document.createElement("h2");
-        title.style.fontWeight = 400;
-        title.style.fontSize = "2.2rem";
-        title.innerHTML = "Tema indstillinger";
-
-        cardblock.appendChild(title);
-
-        // Set page title
-        document.title = "Moodle Tema Indstillinger";
-
-        // Dropdown input select
-
-        var selectField = document.createElement("div");
-        selectField.innerHTML =
-`
-<div class="form-group row  fitem   " id="yui_3_17_2_1_1538685140106_48">
-    <div class="col-md-3">
-        <span class="pull-xs-right text-nowrap">                                    </span>
-        <label class="col-form-label d-inline " for="id_lang"> Vælg præset </label>
-    </div>
-
-    <div class="col-md-9 form-inline felement" data-fieldtype="select" id="yui_3_17_2_1_1538685140106_47">
-        <select class="custom-select" name="lang" id="id_colorpreset">
-            <option value="discord" selected="">Discord Theme</option>
-            <option value="standard">Standard Moodle</option>
-            <option value="custom">Custom</option>
-        </select>
-        <div class="form-control-feedback" id="id_error_lang" style="display: none;"></div>
-    </div>
-</div>
-`
-        cardblock.appendChild(selectField);
-        document.getElementById("id_colorpreset").oninput = setColorInput;
-        if(getColor("colorpreset", "custom") != "")
-        {
-            console.log("selecting index");
-            document.getElementById("id_colorpreset").selectedIndex = getColor("colorpreset", "custom");
-        }
-
-        // Inner HTML
-        var inputField = document.createElement("div");
-        inputField.innerHTML =
-`<div class="form-group row  fitem   ">
-    <div class="col-md-3">
-        <span class="pull-xs-right text-nowrap">
-        </span>
-        <label class="col-form-label d-inline " for="id_pagesize">
-            Farve
-        </label>
-    </div>
-    <div class="col-md-9 form-inline felement" data-fieldtype="text">
-        <input id= "colorinput" name="favcolor" value="#fff" style="background-color: var(--card-holder);border: 0px;" type="color">
-
-        </div>
-    </div>
-</div>`;
-        var preset = document.getElementById("id_colorpreset")[document.getElementById("id_colorpreset").selectedIndex].value
-
-        inputField.getElementsByTagName("label")[0].innerHTML = "Baggrundsfarve: ";
-        inputField.getElementsByTagName("input")[0].value = getColor("SetColorBackgroundInput", preset);
-        inputField.id = "SetColorBackgroundInput";
-        cardblock.appendChild(inputField.cloneNode(true));
-
-        inputField.getElementsByTagName("label")[0].innerHTML = "Navigationsbar farve: ";
-        inputField.getElementsByTagName("input")[0].value = getColor("SetColorNavigationsbarInput", preset);
-        inputField.id = "SetColorNavigationsbarInput";
-        cardblock.appendChild(inputField.cloneNode(true));
-
-        inputField.getElementsByTagName("label")[0].innerHTML = "Kort farve: ";
-        inputField.getElementsByTagName("input")[0].value = getColor("SetColorKortInput", preset);
-        inputField.id = "SetColorKortInput";
-        cardblock.appendChild(inputField.cloneNode(true));
-
-        inputField.getElementsByTagName("label")[0].innerHTML = "Kortholder farve: ";
-        inputField.getElementsByTagName("input")[0].value = getColor("SetColorKortHolderInput", preset);
-        inputField.id = "SetColorKortHolderInput";
-        cardblock.appendChild(inputField.cloneNode(true));
-
-        inputField.getElementsByTagName("label")[0].innerHTML = "Knap farve: ";
-        inputField.getElementsByTagName("input")[0].value = getColor("SetColorKnapInput", preset);
-        inputField.id = "SetColorKnapInput";
-        cardblock.appendChild(inputField.cloneNode(true));
-
-        inputField.getElementsByTagName("label")[0].innerHTML = "Tekst farve: ";
-        inputField.getElementsByTagName("input")[0].value = getColor("SetColorTekstInput", preset);
-        inputField.id = "SetColorTekstInput";
-        cardblock.appendChild(inputField.cloneNode(true));
-
-        inputField.getElementsByTagName("label")[0].innerHTML = "Input farve: ";
-        inputField.getElementsByTagName("input")[0].value = getColor("SetColorInputInput", preset);
-        inputField.id = "SetColorInputInput";
-        cardblock.appendChild(inputField.cloneNode(true));
-
-        inputField.getElementsByTagName("label")[0].innerHTML = "Special farve: ";
-        inputField.getElementsByTagName("input")[0].value = getColor("SetColorSpecialInput", preset);
-        inputField.id = "SetColorSpecialInput";
-        cardblock.appendChild(inputField.cloneNode(true));
-
-        // Save or cancel
-
-        var save = document.createElement("div");
-        save.innerHTML =
-`
-<div class="form-group row  fitem femptylabel  " data-groupname="buttonar">
-    <div class="col-md-3">
-        <span class="pull-xs-right text-nowrap"></span>
-        <label class="col-form-label d-inline " for="fgroup_id_buttonar"></label>
-    </div>
-
-    <div class="col-md-9 form-inline felement" data-fieldtype="group">
-        <div class="form-group  fitem  ">
-        <label class="col-form-label " for="id_submitbutton"></label>
-        <span data-fieldtype="submit">
-            <input class="btn btn-primary" name="submitbutton" id="id_submitbutton" value="Gem" type="submit">
-        </span>
-    </div>
-
-    <div class="form-group  fitem   btn-cancel">
-        <label class="col-form-label " for="id_cancel">                         </label>
-        <span data-fieldtype="submit">
-            <input class="btn btn-secondary" name="cancel" id="id_cancel" value="Annuller" onclick="window.location.href = 'https://moodle.zbc.dk/my/'" type="submit">
-        </span>
-    </div>
-
-</div>
-`;
-        save.onclick = saveColors;
-        cardblock.appendChild(save);
-
-
-    }
+    
 }
 
 function setColorInput()
@@ -1352,6 +1359,13 @@ function setCookie(cname, cvalue, exdays) {
     var expires = "expires="+ d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
+
+
+
+
+
+
+
 
 
 
