@@ -52,6 +52,10 @@ var css = `
     --blurple: `+ blurple +`;
 }
 
+header#page-header div#page-navbar {
+    background-color: var(--bg-color);
+}
+
 body div.course-content ul.topics li.section.main, body div.course-content ul.weeks li.section.main {
     border-bottom-color: var(--blurple);
 }
