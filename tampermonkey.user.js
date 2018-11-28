@@ -56,6 +56,42 @@ header#page-header div#page-navbar {
     background-color: var(--bg-color);
 }
 
+body#page-course-view-topics div#page-wrapper div#page.container-fluid div#page-content.row header#page-header div.card div.card-block div#page-navbar
+{
+    background-color: var(--bg-color);
+}
+
+footer#page-footer div.container-fluid div.row
+{
+    background-color: var(--bg-color);
+}
+
+body div.course-content ul.topics li.section.main.current div.content h3.section-title a
+{
+    color: var(--text-color) !important;
+}
+body div.course-content ul.topics li.section.main.current div.content h3.sectionname a
+{
+    color: var(--text-color) !important;
+}
+body div.course-content ul.weeks li.section.main.current div.content h3.section-title a
+{
+    color: var(--text-color) !important;
+}
+body div.course-content ul.weeks li.section.main.current div.content h3.sectionname a {
+    color: var(--text-color) !important;
+}
+
+body div.course-content ul.topics li.section.main.current
+{
+    background-color: var(--bg-color);
+}
+
+body div.course-content ul.weeks li.section.main.current
+{
+    background-color: var(--bg-color);
+}
+
 body div.course-content ul.topics li.section.main, body div.course-content ul.weeks li.section.main {
     border-bottom-color: var(--blurple);
 }
